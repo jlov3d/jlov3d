@@ -1,0 +1,29 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def generate_jlov3d_plot():
+    time = np.linspace(0, 24, 100)
+    
+    # Release curves: Outer layers release fast, inner layers are delayed
+    # Logic: Layer(n) = 1 - exp(-k * (t - delay))
+    layers = {
+        "Layer 1 (Inflammaging)": {"k": 0.6, "delay": 0},
+        "Layer 2 (Mitochondria)": {"k": 0.3, "delay": 4},
+        "Layer 3 (Senescence)": {"k": 0.15, "delay": 8},
+        "Layer 4 (Stem Cells)": {"k": 0.08, "delay": 12}
+    }
+
+    plt.figure(figsize=(10, 5), facecolor='#f0f0f0')
+    for label, p in layers.items():
+        # Apply time delay for nested layers
+        y = np.maximum(0, 1 - np.exp(-p['k'] * (time - p['delay'])))
+        plt.plot(time, y, label=label, linewidth=2.5)
+
+    plt.title("jlov3d: EternaCapsule™ v0.2 Release Profile", fontsize=14)
+    plt.xlabel("Hours Since Ingestion", fontweight='bold')
+    plt.ylabel("Cumulative Bioavailability", fontweight='bold')
+    plt.grid(color='white', linestyle='-', linewidth=2)
+    plt.legend()
+    plt.show()
+
+generate_jlov3d_plot()
